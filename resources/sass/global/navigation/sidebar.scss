@@ -1,0 +1,97 @@
+@import "../color";
+@import "../vars";
+
+// Icons: https://jetbrains.design/intellij/resources/icons_list/
+
+$sidebar-text-size: 0.75rem;
+
+$sidebar-icon-size: 1.5rem;
+$sidebar-icon-right: 0.25rem;
+
+$sidebar-list-item-margin: 0.25rem;
+$sidebar-indentation: 2rem;
+$sidebar-first-indentation: 1rem;
+
+@mixin icon-boilerplate {
+	//display: inline-block;
+	display: block;
+	float: left;
+
+	background-size: $sidebar-icon-size;
+	width: $sidebar-icon-size;
+	height: $sidebar-icon-size;
+
+	//margin-top: $sidebar-icon-size * 0.1;
+	margin-right: $sidebar-icon-right;
+}
+
+@mixin solution-icon {
+	background: url( "/resources/img/icons/dark/SolutionFolder.svg" ) no-repeat;
+	@include icon-boilerplate;
+}
+
+@mixin folder-icon {
+	background: url( "/resources/img/icons/dark/Folder.svg" ) no-repeat;
+	@include icon-boilerplate;
+}
+
+@mixin file-icon {
+	background: url( "/resources/img/icons/dark/Csharp.svg" ) no-repeat;
+	@include icon-boilerplate;
+}
+
+@mixin icon-center {
+	display: flex;
+	align-items: center;
+}
+
+.solution {
+	@include icon-center;
+
+	&::before {
+		content: "";
+		@include solution-icon;
+	}
+}
+
+.folder {
+	@include icon-center;
+
+	&::before {
+		content: "";
+		@include folder-icon;
+	}
+}
+
+.file {
+	@include icon-center;
+
+	&::before {
+		content: "";
+		@include file-icon;
+	}
+}
+
+.navigation {
+	// Default shit.
+	a {
+		color: unset;
+	}
+
+	background-color: $color-fe-bg;
+	font-size: $sidebar-text-size;
+	//color: $color-scope;
+	color: $color-default;
+
+	.active {
+		color: $color-scope;
+	}
+
+	ul {
+		padding-left: $sidebar-indentation;
+
+		&.solution-top {
+			padding-left: $sidebar-first-indentation;
+		}
+	}
+}

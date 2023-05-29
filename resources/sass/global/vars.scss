@@ -1,0 +1,26 @@
+/*
+Common Margins
+*/
+
+//$navigation-width: 20vw;
+//$content-margin: 2vw;
+//$navigation-width: 250px;
+
+$navigation-width: 275px;
+
+$content-margin: 20px;
+$content-vertical-margin: 5%;
+$content-inner-size-pc: 700px; // 40%
+$content-inner-size-mobile: 90%;
+$content-inner-center-offset-pc: 1400px;
+
+// Any screen that is 900px wide or less;
+$mobile-query-max-width: 1020px;
+
+$font-roboto-condensed: "Roboto Condensed", "Roboto", Tahoma, Verdana, Arial, sans-serif;
+$font-roboto: "Roboto", "Roboto Condensed", Tahoma, Verdana, Arial, sans-serif;
+
+// Buttons
+$button-border-radius: 2px;
+$button-padding-x: 1rem;
+$button-padding-y: 0.5rem;
