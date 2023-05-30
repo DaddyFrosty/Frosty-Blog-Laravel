@@ -11,7 +11,11 @@ $modal-pos-transition-duration: 0.15s;
 $modal-pos-transition-function: ease;
 
 .modal {
-	display: flex;
+	display: none;
+	//display: none;
+	//&.show {
+	//	display: flex;
+	//}
 
 	position: fixed;
 	top: 0;

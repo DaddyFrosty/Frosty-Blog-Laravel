@@ -1,5 +1,5 @@
 <template>
-	<div class="modal fade show" tabindex="-1" id="confirmModal" role="dialog">
+	<div class="modal fade" tabindex="-1" id="confirmModal" role="dialog">
 		<div class="modal-dialog modal-lg" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -21,10 +21,18 @@
 				<div class="modal-footer">
 					<div class="row">
 						<div class="col">
-							<div class="left"><button type="button" v-bind="{ disabled: waiting }" class="button bg-primary left" @click="onClose">{{ options[0] }}</button></div>
+							<div class="left">
+								<button type="button" v-bind="{ disabled: waiting }" class="button bg-primary left" @click="onClose">
+									{{ options[0] }}
+								</button>
+							</div>
 						</div>
 						<div class="col">
-							<div class="right"><button type="button" v-bind="{ disabled: waiting }" class="button bg-danger" @click="onSubmit">{{ options[1] }}</button></div>
+							<div class="right">
+								<button type="button" v-bind="{ disabled: waiting }" class="button bg-danger" @click="onSubmitInternal">
+									{{ options[1] }}
+								</button>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -35,16 +43,16 @@
 
 <script>
 export default {
-	props: [
-		'title',
-		'body',
-		'options',
-		"autoclose",
-	],
+	props: {
+		title : String,
+		body: String,
+		options: Array,
+		autoclose: Boolean | undefined,
+		// onSubmit: Function | null,
+	},
 	name: "confirmModal",
 	methods: {
 		close() {
-			console.log(this.$el)
 			this.$el.modal("hide");
 			this.$emit('close');
 			this.show = false;
@@ -57,9 +65,10 @@ export default {
 			this.$emit('cancel');
 			this.close();
 		},
-		onSubmit() {
+		onSubmitInternal() {
 			this.$emit('submit');
-			if ( this.autoclose == undefined || this.autoclose == true )
+
+			if ( this.autoclose == undefined || this.autoclose === true )
 				this.close();
 		},
 		wait() {

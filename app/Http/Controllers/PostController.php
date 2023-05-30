@@ -18,7 +18,21 @@ class PostController extends Controller
 //		return view( "post.index", [ "posts" => $posts ] );
 
 		$canCreatePost = Post::CanCreate( auth()->user() );
-		return inertia( "Post/Index", [ "posts" => $posts, "canCreate" => $canCreatePost ] );
+		return inertia( "Post/Index",
+			[
+				"posts" => $posts,
+				"canCreate" => $canCreatePost,
+				"canClearCache" => Post::CanClearCache( auth()->user() )
+			] );
+	}
+
+	public function ClearCache()
+	{
+		if ( !Post::CanClearCache( auth()->user() ) )
+			return abort( 403 );
+
+		Post::DestroyCache();
+		return redirect()->route( "posts.index" );
 	}
 
 	protected function FetchPostData( string $postId, bool $bbcodeize ) : array | null

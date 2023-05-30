@@ -74,11 +74,14 @@ function SetupModal( modalElement )
 
 		if ( toShow )
 		{
-			this.style.display = "";
+			// this.style.display = "";
+			this.style.display = "flex";
 			setTimeout( () => { this.classList.add( "show" ) }, 0 );
 		}
 		else
+		{
 			this.classList.remove( "show" );
+		}
 	};
 
 	// Update Visibility.
@@ -107,6 +110,9 @@ function SetupModal( modalElement )
 			modalElement["modal"]( "show" );
 		}, 0 );
 	}
+	else {
+		modalElement.style.display = "none";
+	}
 }
 
 function SetupModals()
@@ -134,3 +140,11 @@ router.on( "finish", () => {
 } );
 
 SetupModals();
+
+// Hot Module Replacement, for vite ( dev server ).
+if ( import.meta?.hot != undefined )
+{
+	import.meta.hot.on( "vite:afterUpdate", () => {
+		SetupModals();
+	} );
+}

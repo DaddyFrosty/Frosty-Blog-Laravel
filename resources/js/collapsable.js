@@ -97,3 +97,11 @@ export function VueSetup()
 	OnPageLoad();
 	// console.log("VueSetup");
 }
+
+// Hot Module Replacement, for vite ( dev server ).
+if ( import.meta?.hot != undefined )
+{
+	import.meta.hot.on( "vite:afterUpdate", () => {
+		OnPageLoad();
+	} );
+}

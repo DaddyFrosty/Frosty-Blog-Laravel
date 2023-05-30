@@ -20,12 +20,6 @@
 					<button class="button bg-danger mt-3" v-if="post.canDelete" data-toggle="modal" data-target="#delete-modal">
 						Delete
 					</button>
-					<button class="button bg-danger mt-3" v-if="post.canDelete" data-toggle="modal" data-target="#delete-modal2">
-						Delete2
-					</button>
-<!--					<form class="inline-block" v-if="post.canDelete" @submit.prevent="deleteForm.delete( route( 'posts.delete_post', { 'PostId': post.url_title } ) )">-->
-<!--						<button type="submit" class="button bg-danger mt-3">Delete</button>-->
-<!--					</form>-->
 			</div>
 			<div class="body" v-html="post.body"></div>
 		</div>
@@ -35,12 +29,14 @@
 		title="Confirm Deletion"
 		:body='"Are you sure you want to delete \"" + post.title + "\"?"'
 		:options="['Cancel', 'Delete' ]"
-		autoclose="false"
+		:autoclose="true"
+		:onSubmit="deletePost"
 	/>
 </template>
 
 <script>
 import { Head, Link, useForm } from "@inertiajs/vue3";
+import { router } from "@inertiajs/core";
 
 import Common from "@/Pages/Layout/Common.vue";
 import { Namespaceify } from "@/utility";
@@ -57,19 +53,27 @@ export default {
 			canDelete: Boolean,
 		},
 	},
-	methods: {
-		Namespaceify
-	},
 	components: {
 		ConfirmModal,
 		Head,
 		Link,
 		Common
 	},
-	setup( props )
-	{
-		const deleteForm = useForm( {} );
-		return { deleteForm };
+	methods: {
+		Namespaceify,
+		deletePost() {
+			if ( this.isDeleting )
+				return;
+
+			const delPath = route( 'posts.delete_post', { 'PostId': this.$props.post.url_title } );
+			router.delete( delPath );
+			this.isDeleting = true;
+		}
+	},
+	data() {
+		return {
+			isDeleting: false,
+		}
 	},
 }
 </script>

@@ -102,6 +102,12 @@ class Post extends Model
 		return $this->CanEdit( $user );
 	}
 
+	public static function CanClearCache( User | null $user ) : bool
+	{
+//		return $user->hasPermission( "clear_posts_cache" );
+		return true;
+	}
+
 	/*
 	 * Title Validation.
 	 */

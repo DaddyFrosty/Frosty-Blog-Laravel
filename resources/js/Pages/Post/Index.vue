@@ -6,9 +6,16 @@
 		<template v-slot:namespace_path>.Posts</template>
 
 		<div class="relative">
-			<Link v-if="canCreate"
-				  :href="route( 'posts.create_post' )"
-				  class="button bg-keyword absolute right-0 -top-11">Create Post</Link>
+			<div v-if="canCreate || canClearCache" class="absolute right-0 -top-11">
+				<Link v-if="canCreate"
+					  :href="route( 'posts.create_post' )"
+					  class="button bg-keyword">Create Post</Link>
+
+				<form class="inline-block" v-if="canClearCache"
+					  @submit.prevent="clearCacheForm.delete( route( 'posts.clear_cache' ) )">
+					<button type="submit" class="button bg-warning ml-1" :disabled="clearCacheForm.processing">Clear Cache</button>
+				</form>
+			</div>
 
 			<h3 v-if="posts == undefined || posts.length === 0">
 				No posts found.
@@ -33,7 +40,7 @@
 </template>
 
 <script>
-import { Link, Head } from "@inertiajs/vue3";
+import { Link, Head, useForm } from "@inertiajs/vue3";
 
 import Common from "@/Pages/Layout/Common.vue";
 
@@ -46,11 +53,22 @@ export default {
 			author: String,
 		},
 		canCreate: Boolean,
+		canClearCache: Boolean,
 	},
 	components: {
 		Link,
 		Head,
 		Common
+	},
+	setup( props )
+	{
+		const clearCacheForm = useForm( {
+			_method: "delete",
+		} );
+
+		return {
+			clearCacheForm,
+		};
 	}
 }
 </script>

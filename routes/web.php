@@ -33,6 +33,7 @@ Route::get( "posts/create", [ PostController::class, "CreatePostPage" ] )->name(
 Route::post( "posts/create", [ PostController::class, "CreatePost" ] )->name( "posts.submit_create_post" );
 
 Route::get( "posts", [ PostController::class, "Index" ] )->name( "posts.index" );
+Route::delete( "posts", [ PostController::class, "ClearCache" ] )->name( "posts.clear_cache" );
 Route::get( "posts/{PostId}", [ PostController::class, "ViewPost" ] )->name( "posts.view_post" );
 
 Route::get( "posts/{PostId}/edit", [ PostController::class, "EditPostPage" ] )->name( "posts.edit_post" );
