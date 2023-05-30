@@ -40,6 +40,11 @@ $sidebar-first-indentation: 1rem;
 	@include icon-boilerplate;
 }
 
+@mixin link-icon {
+	background: url( "/resources/img/icons/dark/addLink.svg" ) no-repeat;
+	@include icon-boilerplate;
+}
+
 @mixin icon-center {
 	display: flex;
 	align-items: center;
@@ -72,6 +77,15 @@ $sidebar-first-indentation: 1rem;
 	}
 }
 
+.link {
+	@include icon-center;
+
+	&::before {
+		content: "";
+		@include link-icon;
+	}
+}
+
 .navigation {
 	// Default shit.
 	a {
@@ -93,5 +107,12 @@ $sidebar-first-indentation: 1rem;
 		&.solution-top {
 			padding-left: $sidebar-first-indentation;
 		}
+	}
+
+	.sidebar {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		flex: 1;
 	}
 }

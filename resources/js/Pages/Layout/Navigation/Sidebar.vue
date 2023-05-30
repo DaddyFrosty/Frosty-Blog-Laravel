@@ -25,6 +25,10 @@
 				</ul>
 			</li>
 		</ul>
+
+		<a class="link w-full mt-auto" :href="route( 'login.steam' )">
+			Login
+		</a>
 	</div>
 </template>
 
