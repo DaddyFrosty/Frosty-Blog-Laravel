@@ -16,7 +16,7 @@
 			<ul v-else class="no-pad posts">
 				<li class="post" v-for="post in posts">
 					<Link :href="route( 'posts.view_post', { 'PostId': post.url_title } )">
-					<div class="col">
+					<div class="row">
 						<div class="first">
 							<div class="title">{{ post.title }}</div>
 							<div class="date">{{ post.created_at }}</div>

@@ -12,7 +12,7 @@
 		@foreach ( $posts as $post )
 			<li class="post">
 				<a href="{{ route( "posts.view_post", [ "PostId" => $post->url_title ] ) }}">
-					<div class="col">
+					<div class="row">
 						<div class="first">
 							<div class="title">{{ $post->title }}</div>
 							<div class="date">{{ $post->created_at }}</div>

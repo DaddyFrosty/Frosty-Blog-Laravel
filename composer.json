@@ -9,6 +9,7 @@
         "daddyfrosty/laravel-bbcode-parser-zaym": "^1.0",
         "guzzlehttp/guzzle": "^7.2",
         "inertiajs/inertia-laravel": "^0.6.9",
+        "kanalumaddela/laravel-steam-login": "dev-master",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",

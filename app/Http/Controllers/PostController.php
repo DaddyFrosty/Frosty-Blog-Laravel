@@ -42,11 +42,12 @@ class PostController extends Controller
 
 		// Add edit flag.
 		$safePost["canEdit"] = $post->CanEdit( auth()->user() );
+		$safePost["canDelete"] = $post->CanDelete( auth()->user() );
 
 		return $safePost;
 	}
 
-	public function ViewPost( Request $request, $PostId )
+	public function ViewPost( Request $request, string $PostId )
 	{
 		$post = $this->FetchPostData( $PostId, true );
 		if ( !$post )
@@ -55,7 +56,7 @@ class PostController extends Controller
 		return inertia( "Post/ViewPost", [ "post" => $post ] );
 	}
 
-	public function EditPostPage( Request $request, $PostId )
+	public function EditPostPage( Request $request, string $PostId )
 	{
 		$post = $this->FetchPostData( $PostId, false );
 		if ( !$post )
@@ -88,7 +89,7 @@ class PostController extends Controller
 	}
 
 	// Submit.
-	public function ApplyEditsToPost( Request $request, $PostId )
+	public function ApplyEditsToPost( Request $request, string $PostId )
 	{
 		$data = $this->ValidatePostData( $request );
 		if ( isset( $data["errors"] ) )
@@ -113,6 +114,9 @@ class PostController extends Controller
 		}
 		$post->body = $data["body"]; // $request->input( "body" );
 		$post->save();
+
+		// Destroy cache.
+		Post::DestroyCache();
 
 		return redirect()->route( "posts.view_post", [ "PostId" => $post->url_title ] );
 	}
@@ -146,6 +150,33 @@ class PostController extends Controller
 		]);
 		$post->save();
 
+		// Destroy cache.
+		Post::DestroyCache();
+
 		return redirect()->route( "posts.view_post", [ "PostId" => $post->url_title ] );
+	}
+
+	// API Call.
+	public function DeletePost( Request $request, string $PostId )
+	{
+		$post = Post::where( "url_title", $PostId )
+			->first();
+
+		if ( !$post )
+			return abort( 404 );
+
+		// Check Edit Permissions.
+		if ( !$post->CanDelete( auth()->user() ) )
+			return abort( 403 );
+
+		$post->SetVisibility( "hidden" );
+		$post->save();
+
+		// Destroy cache.
+		Post::DestroyCache();
+
+		return redirect()
+			->route( "posts.index" )
+			->with( "message", "The post \"" . $post->title . "\" has been deleted." );
 	}
 }

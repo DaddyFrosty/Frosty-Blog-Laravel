@@ -29,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
 		JsonResource::withoutWrapping();
 
 		Inertia::share( "app", [
-			"name" => env( "APP_NAME" ),
+			"name" => env( "APP_NAME" )
 		] );
     }
 }

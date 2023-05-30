@@ -1,5 +1,6 @@
 import './bootstrap';
 import { VueSetup } from "./collapsable";
+import { ModalsVueSetup } from "./modal";
 
 import { createApp, h } from "vue"
 import { createInertiaApp } from "@inertiajs/vue3"
@@ -22,5 +23,6 @@ createInertiaApp({
 			.mount( el );
 
 		VueSetup();
+		ModalsVueSetup();
 	},
 });

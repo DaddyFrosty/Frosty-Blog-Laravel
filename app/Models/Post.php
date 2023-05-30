@@ -5,10 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
+
+use App\Structs\CacheInfo;
 
 class Post extends Model
 {
     use HasFactory;
+
+	protected static CacheInfo $CachePostsList;
+
+	public static function Init()
+	{
+		Post::$CachePostsList = new CacheInfo( "posts_list", 3600 * 12 );
+	}
 
 	/**
      * The attributes that are mass assignable.
@@ -42,6 +52,11 @@ class Post extends Model
 	public function GetVisibility() : string
 	{
 		return $this->getAttribute("visible");
+	}
+
+	public function SetVisibility( string $visibility ) : void
+	{
+		$this->setAttribute( "visible", $visibility );
 	}
 
 	/*
@@ -84,7 +99,7 @@ class Post extends Model
 
 	public function CanDelete( User | null $user ) : bool
 	{
-		return CanEdit( $user );
+		return $this->CanEdit( $user );
 	}
 
 	/*
@@ -103,10 +118,18 @@ class Post extends Model
 	 */
 	public static function ListAllPostsCached() : Collection
 	{
-		return Post::select( "title", "url_title", "created_at", "author" )
-				->where( "visible", "visible" )
-				->orderBy( "id", "DESC" )
-				->get();
+		return Cache::remember( Post::$CachePostsList->Key, Post::$CachePostsList->Time, function() {
+			return Post::select( "title", "url_title", "created_at", "author" )
+					->where( "visible", "visible" )
+					->orderBy( "id", "DESC" )
+					->get();
+		} );
+	}
+
+	public static function DestroyCache()
+	{
+		if ( Cache::has( Post::$CachePostsList->Key ) )
+			Cache::forget( Post::$CachePostsList->Key );
 	}
 
 	/*
@@ -142,3 +165,5 @@ class Post extends Model
 		return str_replace( " ", "_", $url_title );
 	}
 }
+
+Post::Init();

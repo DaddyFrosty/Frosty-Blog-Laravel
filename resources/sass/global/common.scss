@@ -2,6 +2,34 @@
 @import "color";
 @import "vars";
 @import "navigation/sidebar";
+@import "modal";
+
+/*
+ Reapplying defaults.
+ */
+h1 {
+	font-size: 2em;
+}
+
+h2 {
+	font-size: 1.5em;
+}
+
+h3 {
+	font-size: 1.17em;
+}
+
+h4 {
+	font-size: 1em;
+}
+
+h5 {
+	font-size: .83em;
+}
+
+h6 {
+	font-size: .67em;
+}
 
 #app {
 	display: flex;
@@ -214,12 +242,31 @@ ul {
 /* COL, ROW */
 .col {
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
+	//height: 100%;
+
+	flex-grow: 1;
+	flex-basis: 0;
+	max-width: 100%;
 }
 
 .row {
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
+	flex-wrap: wrap;
+	width: 100%;
+}
+
+.left {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+}
+
+.right {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
 }
 
 /* POSTS */
@@ -382,6 +429,11 @@ $post-image-border-radius: 0.25rem;
 
 	&.error-message {
 		background-color: $color-danger;
+		color: $color-scope;
+	}
+
+	&.success-message {
+		background-color: $color-success;
 		color: $color-scope;
 	}
 }

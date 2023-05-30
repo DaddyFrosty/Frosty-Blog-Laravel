@@ -2,6 +2,10 @@
 
 use App\Http\Controllers\PostController;
 
+// Steam Login.
+use kanalumaddela\LaravelSteamLogin\Facades\SteamLogin;
+use App\Http\Controllers\Auth\SteamLoginController;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,6 +24,10 @@ Route::get('/', function () {
 	return inertia( 'Index' );
 })->name( "index" );
 
+// Login.
+SteamLogin::routes( ["controller" => SteamLoginController::class ] );
+Route::get( "logout", [ SteamLoginController::class, "Logout" ] )->name('logout');
+
 // Posts.
 Route::get( "posts/create", [ PostController::class, "CreatePostPage" ] )->name( "posts.create_post" );
 Route::post( "posts/create", [ PostController::class, "CreatePost" ] )->name( "posts.submit_create_post" );
@@ -29,3 +37,5 @@ Route::get( "posts/{PostId}", [ PostController::class, "ViewPost" ] )->name( "po
 
 Route::get( "posts/{PostId}/edit", [ PostController::class, "EditPostPage" ] )->name( "posts.edit_post" );
 Route::post( "posts/{PostId}/edit", [ PostController::class, "ApplyEditsToPost" ] )->name( "posts.submit_edit_post" );
+
+Route::delete( "posts/{PostId}", [ PostController::class, "DeletePost" ] )->name( "posts.delete_post" );

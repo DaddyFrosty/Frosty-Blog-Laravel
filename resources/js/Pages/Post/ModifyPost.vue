@@ -18,8 +18,13 @@
 					-
 					<span class="author keyword">{{ post.author }}</span>
 				</div>
-				<button class="button bg-keyword mt-3" v-if="isEdit">Save</button>
-				<button class="button bg-success mt-3" v-else>Post</button>
+
+				<button type="submit" class="button bg-keyword mt-3" v-if="isEdit" :disabled="postForm.processing">
+					Save
+				</button>
+				<button type="submit" class="button bg-success mt-3" v-else :disabled="postForm.processing">
+					Post
+				</button>
 			</div>
 			<div class="body">
 				<textarea v-model="postForm.body" name="body"></textarea>

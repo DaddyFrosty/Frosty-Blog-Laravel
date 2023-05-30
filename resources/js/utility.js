@@ -28,3 +28,17 @@ export function Namespaceify( str )
 
 	return namespace;
 }
+
+// May return null if no parent is found.
+export function FindParent( element, matchFunction )
+{
+	let parent = element.parentElement;
+	while ( parent != null )
+	{
+		if ( matchFunction( parent ) )
+			return parent;
+		parent = parent.parentElement;
+	}
+
+	return null;
+}
