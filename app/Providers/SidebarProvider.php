@@ -4,6 +4,12 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
+use App\Models\Post;
+use App\Http\Resources\PostCompactResource;
+use Inertia\Inertia;
+
+use App\Config;
+
 class SidebarProvider extends ServiceProvider
 {
     /**
@@ -23,11 +29,14 @@ class SidebarProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Provides the posts to the sidebar.
+//		dd(PostCompactResource::collection( Post::ListAllPostsCached() )->resolve());
 		view()->composer( "layouts.navigation.sidebar", function( $view ) {
 			$view
-				->with( "posts", \App\Models\Post::ListAllPostsCached() )
-				->with( "sidebar_maxlen", \App\Config::$SidebarPostTitleMaxLength );
+				->with( "posts", PostCompactResource::collection( Post::ListAllPostsCached() )->resolve() );
 		});
+
+        // Provides the posts to the sidebar.
+		// Inertia.
+		Inertia::share( "posts_sidebar", PostCompactResource::collection( Post::ListAllPostsCached() ) );
     }
 }

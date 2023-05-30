@@ -15,13 +15,14 @@
 			<ul id="posts-content">
 				@foreach ( $posts as $post )
 					<li>
-						<a 	href="{{ route( "posts.view_post", [ "PostId" => $post->url_title ] ) }}" 
-							class="file {{ (request()->is( "posts/" . $post->url_title )) ? "active" : "" }}">
-							@if ( mb_strlen( $post->title ) > $sidebar_maxlen )
-								{{ mb_substr( $post->title, 0, $sidebar_maxlen ) }}...
-							@else
-								{{ $post->title }}
-							@endif
+						<a	href="{{ route( "posts.view_post", [ "PostId" => $post["url_title"] ] ) }}"
+							class="file {{ (request()->is( "posts/" . $post["url_title"] )) ? "active" : "" }}">
+{{--							@if ( mb_strlen( $post->title ) > $sidebar_maxlen )--}}
+{{--								{{ mb_substr( $post->title, 0, $sidebar_maxlen ) }}...--}}
+{{--							@else--}}
+{{--								{{ $post->title }}--}}
+{{--							@endif--}}
+							{{ $post["title"] }}
 						</a>
 					</li>
 				@endforeach

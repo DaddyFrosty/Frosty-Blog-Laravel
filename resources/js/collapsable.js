@@ -86,6 +86,18 @@ function OnPageLoad()
 }
 OnPageLoad();
 
+import { router } from '@inertiajs/vue3'
+router.on( "finish", () => {
+	console.log("finish");
+	OnPageLoad();
+} );
+
+export function VueSetup()
+{
+	OnPageLoad();
+	console.log("VueSetup");
+}
+
 // Initialize state on refresh / intial load.
 // let collapsibleLinksI = document.querySelectorAll(`[data-toggle="collapse"]`);
 // for ( let i = 0; i < collapsibleLinksI.length; i++ )

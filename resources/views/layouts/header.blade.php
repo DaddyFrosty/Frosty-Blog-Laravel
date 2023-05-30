@@ -20,7 +20,7 @@
 	{{-- <script src="{{ asset( 'js/utility.js' ) }}"></script> --}}
 	{{-- @livewireStyles --}}
 
-	@vite(['resources/sass/app.scss', 'resources/js/app.js'])
+	@vite(["resources/sass/app.scss", "resources/js/app.js"])
 	@stack('styles')
 </head>
 <body>
