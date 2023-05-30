@@ -131,6 +131,14 @@ body, #app {
 	color: $color-default;
 }
 
+error {
+	color: $color-error;
+}
+
+.comment, comment {
+	color: $color-comment;
+}
+
 /* DEFAULT TAGS */
 a {
 	text-decoration: none;
@@ -181,6 +189,26 @@ ul {
 
 .bg-default {
 	background-color: $color-default;
+}
+
+.bg-primary {
+	background-color: $color-primary;
+}
+
+.bg-secondary {
+	background-color: $color-secondary;
+}
+
+.bg-success {
+	background-color: $color-success;
+}
+
+.bg-danger {
+	background-color: $color-danger;
+}
+
+.bg-warning {
+	background-color: $color-warning;
 }
 
 /* COL, ROW */
@@ -278,8 +306,18 @@ $post-image-border-radius: 0.25rem;
 	.header {
 		background-color: $post-bg;
 		padding: $post-padding;
-		border-radius: $post-border-radius;
 		margin-bottom: $post-header-spacing;
+
+		border-radius: $post-border-radius;
+		&.error {
+			border-top-left-radius: 0;
+			border-top-right-radius: 0;
+		}
+	}
+
+	.error-message {
+		border-top-left-radius: $post-border-radius;
+		border-top-right-radius: $post-border-radius;
 	}
 
 	.body {
@@ -301,6 +339,8 @@ $post-image-border-radius: 0.25rem;
 		border-color: $color-default;
 		border-radius: 0.15rem;
 		border-width: 0.15rem;
+
+		padding: 0.5rem 0.75rem;
 	}
 
 	textarea {
@@ -319,4 +359,29 @@ $post-image-border-radius: 0.25rem;
 	//height: 2% !important;
 	overflow: hidden;
 	transition: height 0.35s ease;
+}
+
+/* Banners */
+.banner {
+	padding: 0.5rem 0.75rem;
+	font-size: 1rem;
+
+	width: 100%;
+
+	font-family: $font-roboto-condensed;
+	//font-family: $font-roboto;
+
+	//border-style: solid;
+	//border-width: 1px;
+	//border-color: $color-default;
+	//border-bottom-width: 0;
+
+	.head {
+		font-weight: bold;
+	}
+
+	&.error-message {
+		background-color: $color-danger;
+		color: $color-scope;
+	}
 }

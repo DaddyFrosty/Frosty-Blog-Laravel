@@ -1,4 +1,7 @@
 <template>
+	<Head>
+		<title>{{ V_FormatTitle( null ) }}</title>
+	</Head>
 	<Common>
 		<p class="scope">
 			Hey I'm <span class="type">{{ $page.props.app.name }}</span> I do a lot of development in
@@ -13,9 +16,11 @@
 
 <script>
 import Common from "@/Pages/Layout/Common.vue";
+import {Head} from "@inertiajs/vue3";
 
 export default {
 	components: {
+		Head,
 		Common
 	}
 }

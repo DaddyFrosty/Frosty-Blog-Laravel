@@ -12,7 +12,18 @@ $color-namespace: #b8d7a3;
 $color-name: #ff8000;
 $color-var: #bdb76b;
 
+// new.
+$color-error: #ff3333;
+$color-comment: #57a64a;
+
 $color-scope: #dcdcdc;
 $color-default: #b4b4b4;
 
 $color-white: $color-default;
+
+// For buttons and stuff.
+$color-primary: $color-keyword;
+$color-secondary: $color-default;
+$color-success: $color-comment;
+$color-danger: $color-error;
+$color-warning: $color-type;

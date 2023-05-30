@@ -21,5 +21,11 @@ Route::get('/', function () {
 })->name( "index" );
 
 // Posts.
+Route::get( "posts/create", [ PostController::class, "CreatePostPage" ] )->name( "posts.create_post" );
+Route::post( "posts/create", [ PostController::class, "CreatePost" ] )->name( "posts.submit_create_post" );
+
 Route::get( "posts", [ PostController::class, "Index" ] )->name( "posts.index" );
 Route::get( "posts/{PostId}", [ PostController::class, "ViewPost" ] )->name( "posts.view_post" );
+
+Route::get( "posts/{PostId}/edit", [ PostController::class, "EditPostPage" ] )->name( "posts.edit_post" );
+Route::post( "posts/{PostId}/edit", [ PostController::class, "ApplyEditsToPost" ] )->name( "posts.submit_edit_post" );
