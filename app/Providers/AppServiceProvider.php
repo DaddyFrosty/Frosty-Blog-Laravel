@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Inertia\Inertia;
 
@@ -25,7 +26,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // To avoid nested data: data.
+		if ( config( "app.env" ) === "production" )
+			URL::forceScheme( "https" );
+
+		// To avoid nested data: data.
 		JsonResource::withoutWrapping();
 
 		Inertia::share( "app", [
