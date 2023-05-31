@@ -45,6 +45,11 @@ $sidebar-first-indentation: 1rem;
 	@include icon-boilerplate;
 }
 
+@mixin remove-icon {
+	background: url( "/resources/img/icons/dark/remove.svg" ) no-repeat;
+	@include icon-boilerplate;
+}
+
 @mixin icon-center {
 	display: flex;
 	align-items: center;
@@ -86,6 +91,15 @@ $sidebar-first-indentation: 1rem;
 	}
 }
 
+.remove {
+	@include icon-center;
+
+	&::before {
+		content: "";
+		@include remove-icon;
+	}
+}
+
 .navigation {
 	// Default shit.
 	a {
@@ -114,5 +128,30 @@ $sidebar-first-indentation: 1rem;
 		flex-direction: column;
 		height: 100%;
 		flex: 1;
+	}
+
+	.avatar {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+
+		img {
+			width: $posts-author-img-size;
+			height: $posts-author-img-size;
+			border-radius: $posts-author-border-radius;
+		}
+
+		font-weight: $posts-author-font-weight;
+		font-size: 0.8rem;
+	}
+
+	@media ( max-width: $mobile-query-max-width ) {
+		.avatar-div {
+			margin-top: 1rem;
+		}
+
+		.avatar img {
+			display: none;
+		}
 	}
 }

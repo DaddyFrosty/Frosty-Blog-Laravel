@@ -12,19 +12,28 @@
 		>
 			<ErrorMessage :errors="$props.errors" />
 			<div class="header" :class="{ 'error': $props.errors }">
-				<input type="text" v-model="postForm.title" name="title"/>
-				<div class="mt-2" v-if="isEdit">
-					<span class="date">{{ post.created_at }}</span>
-					-
-					<span class="author keyword">{{ post.author }}</span>
-				</div>
+				<div class="row">
+					<div class="grow">
+						<input type="text" v-model="postForm.title" name="title"/>
+						<div class="mt-2" v-if="isEdit">
+							<span class="date">{{ post.created_at }}</span>
+<!--							- -->
+<!--							<span class="author keyword">{{ post.author }}</span>-->
+						</div>
 
-				<button type="submit" class="button bg-keyword mt-3" v-if="isEdit" :disabled="postForm.processing">
-					Save
-				</button>
-				<button type="submit" class="button bg-success mt-3" v-else :disabled="postForm.processing">
-					Post
-				</button>
+						<button type="submit" class="button bg-keyword mt-3" v-if="isEdit" :disabled="postForm.processing">
+							Save
+						</button>
+						<button type="submit" class="button bg-success mt-3" v-else :disabled="postForm.processing">
+							Post
+						</button>
+					</div>
+
+					<div class="author keyword">
+						<img :src="post.author.avatar_url" :alt="post.author.name + '\'s Avatar'" />
+						{{ post.author.name }}
+					</div>
+				</div>
 			</div>
 			<div class="body">
 				<textarea v-model="postForm.body" name="body"></textarea>
@@ -46,7 +55,10 @@ export default {
 		current_post_state: {
 			title: String,
 			created_at: String,
-			author: String,
+			author: {
+				name: String,
+				avatar_url: String,
+			},
 			namespace: String,
 		},
 

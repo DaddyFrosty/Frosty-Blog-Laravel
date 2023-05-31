@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Cache;
 
 use App\Structs\CacheInfo;
@@ -14,10 +15,12 @@ class Post extends Model
     use HasFactory;
 
 	protected static CacheInfo $CachePostsList;
+	protected static CacheInfo $CachePost;
 
 	public static function Init()
 	{
 		Post::$CachePostsList = new CacheInfo( "posts_list", 3600 * 12 );
+		Post::$CachePost = new CacheInfo( "post_", 3600 * 12 );
 	}
 
 	/**
@@ -28,7 +31,7 @@ class Post extends Model
     protected $fillable = [
         'title',
         'url_title',
-        'author',
+        'author_uid',
 		"body",
 		"visible"
     ];
@@ -49,6 +52,25 @@ class Post extends Model
     protected $casts = [
     ];
 
+	/*
+	 * Author relationship.
+	 */
+//	public function author() : BelongsTo
+//	{
+//		return $this->belongsTo( User::class, 'author_uid', 'uid' );
+//	}
+
+	protected function getAuthorAttribute() : User
+	{
+		if ( $this->relationLoaded( "author" ) )
+			return $this->getRelationValue( "author" );
+
+		$author = User::GetCachedUser( $this->author_uid );
+
+		$this->setRelation( "author", $author );
+		return $author;
+	}
+
 	public function GetVisibility() : string
 	{
 		return $this->getAttribute("visible");
@@ -64,11 +86,10 @@ class Post extends Model
 	 */
 	public static function CanCreate( User | null $user ) : bool
 	{
-		return true;
 		if ( $user == null )
 			return false;
 
-		if ( $user->hasPermission( "create_posts" ) )
+		if ( $user->HasPermission( "POST_CREATE" ) )
 			return true;
 
 		return false;
@@ -79,33 +100,46 @@ class Post extends Model
 		if ( $this->GetVisibility() == "visible" )
 			return true;
 
-//		if ( $user->hasPermission( "view_hidden_posts" ) )
-//			return true;
+		if ( $user && $user->HasPermission( "POST_VIEW_HIDDEN" ) )
+			return true;
 
 		return false;
 	}
 
 	public function CanEdit( User | null $user ) : bool
 	{
-		return true;
-//		if ( $user->name == $this->author )
-//			return true;
+		if ( $user == null )
+			return false;
 
-//		if ( $user->hasPermission( "edit_posts" ) )
-//			return true;
+		if ( $user->name == $this->author && $user->HasPermission( "POST_EDIT_OWN" ) )
+			return true;
 
-//		return false;
+		if ( $user->HasPermission( "POST_EDIT_OTHERS" ) )
+			return true;
+
+		return false;
 	}
 
 	public function CanDelete( User | null $user ) : bool
 	{
-		return $this->CanEdit( $user );
+		if ( $user == null )
+			return false;
+
+		if ( $user->name == $this->author && $user->HasPermission( "POST_DELETE_OWN" ) )
+			return true;
+
+		if ( $user->HasPermission( "POST_DELETE_OTHERS" ) )
+			return true;
+
+		return false;
 	}
 
 	public static function CanClearCache( User | null $user ) : bool
 	{
-//		return $user->hasPermission( "clear_posts_cache" );
-		return true;
+		if ( $user == null )
+			return false;
+
+		return $user->HasPermission( "POST_CLEAR_CACHE" );
 	}
 
 	/*
@@ -117,25 +151,6 @@ class Post extends Model
 			return "Create is a reserved title.";
 
 		return null;
-	}
-
-	/*
-	 * List all posts.
-	 */
-	public static function ListAllPostsCached() : Collection
-	{
-		return Cache::remember( Post::$CachePostsList->Key, Post::$CachePostsList->Time, function() {
-			return Post::select( "title", "url_title", "created_at", "author" )
-					->where( "visible", "visible" )
-					->orderBy( "id", "DESC" )
-					->get();
-		} );
-	}
-
-	public static function DestroyCache()
-	{
-		if ( Cache::has( Post::$CachePostsList->Key ) )
-			Cache::forget( Post::$CachePostsList->Key );
 	}
 
 	/*
@@ -169,6 +184,73 @@ class Post extends Model
 		$url_title = str_replace( "_", " ", $url_title );
 		$url_title = ucwords( $url_title );
 		return str_replace( " ", "_", $url_title );
+	}
+
+	/*
+	 * UNCACHED - Get Post.
+	 */
+	public static function GetPost( int $postId ) : Post | null
+	{
+		return Post::find( $postId )->first();
+	}
+
+	/*
+	 * Cached - Get Post.
+	 */
+	public static function GetCachedPost( int $postId ) : Post | null
+	{
+		return Cache::remember( Post::$CachePost->Key . $postId, Post::$CachePost->Time,
+		function() use ( $postId ) {
+			return Post::GetPost( $postId );
+		} );
+	}
+
+	public static function FlushPostCache( int $postId ) : void
+	{
+		if ( Cache::has( Post::$CachePost->Key . $postId ) )
+			Cache::forget( Post::$CachePost->Key . $postId );
+	}
+
+	public function FlushCached()
+	{
+		Post::FlushPostCache( $this->id );
+	}
+
+	/*
+	 * List all posts.
+	 */
+	public static function ListAllPostsCached() : Collection
+	{
+		return Cache::remember( Post::$CachePostsList->Key, Post::$CachePostsList->Time, function() {
+			return Post::select( "title", "url_title", "created_at", "author_uid" )
+				->where( "visible", "visible" )
+				->orderBy( "id", "DESC" )
+				->get();
+		} );
+	}
+
+	public function UpdateCache() : void
+	{
+		Post::FlushListCache();
+		Cache::set( Post::$CachePost->Key . $this->id, $this, Post::$CachePost->Time );
+	}
+
+	public static function FlushListCache() : void
+	{
+		if ( Cache::has( Post::$CachePostsList->Key ) )
+			Cache::forget( Post::$CachePostsList->Key );
+	}
+
+	/*
+	 * Flush all caches.
+	 * Including individual posts.
+	 */
+	public static function FlushCache() : void
+	{
+		Post::FlushListCache();
+		$posts = Post::select( "id" )->get();
+		foreach ( $posts as $post )
+			Post::FlushPostCache( $post->id );
 	}
 }
 

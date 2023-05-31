@@ -31,5 +31,9 @@ class AppServiceProvider extends ServiceProvider
 		Inertia::share( "app", [
 			"name" => env( "APP_NAME" )
 		] );
+
+//		if ( isset( app ) )
+//		Inertia::share( "user", [] );
+		// Moved to HandleInertiaRequests.php
     }
 }

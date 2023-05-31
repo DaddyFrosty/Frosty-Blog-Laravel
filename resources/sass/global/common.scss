@@ -277,7 +277,12 @@ $posts-border-radius: 0.5rem;
 
 $posts-font: $font-roboto-condensed;
 $posts-font-color: $color-scope;
-$posts-author-color: $color-name;
+
+$posts-author-color: unset;
+// Moved to Vars
+//$posts-author-font-weight: bold;
+//$posts-author-img-size: 2.5rem;
+//$posts-author-border-radius: 0.25rem;
 
 $posts-date-font-size: 0.95rem;
 $posts-date-font-color: $color-default;
@@ -290,17 +295,29 @@ $posts-date-margin-top: 0.1rem;
 		border-radius: $posts-border-radius;
 
 		font-family: $posts-font;
-		.title, .date, .author {
+		.title, .date {
 			color: $posts-font-color;
 		}
 
+		.author {
+			img {
+				width: $posts-author-img-size;
+				height: $posts-author-img-size;
+				border-radius: $posts-author-border-radius;
+			}
+
+			font-weight: $posts-author-font-weight;
+			color: $posts-author-color;
+		}
+
 		.first {
-			width: 50%;
+			//width: 50%;
+			flex-grow: 1;
 		}
 
 		.second {
 			display: flex;
-			width: 50%;
+			//width: 50%;
 			flex-direction: row-reverse;
 		}
 
@@ -313,18 +330,18 @@ $posts-date-margin-top: 0.1rem;
 			color: $posts-date-font-color;
 			margin-top: $posts-date-margin-top;
 		}
-
-		.author {
-			font-weight: bold;
-			color: unset;
-		}
 	}
 }
 
 $post-title-font-size: 2rem;
 $post-date-font-size: 1.25rem;
+
+//$post-author-color: $posts-author-color;
+$post-author-font-weight: $posts-author-font-weight;
 $post-author-font-size: 1rem;
-//$post-body-font-size: 2rem;
+
+$post-author-img-size: $posts-author-img-size;
+$post-author-border-radius: $posts-author-border-radius;
 
 // Bg radiuses.
 $post-bg: $color-fe-bg;
@@ -348,7 +365,17 @@ $post-image-border-radius: 0.25rem;
 	}
 
 	.author {
+		margin-left: $post-padding;
+
+		img {
+			width: $post-author-img-size;
+			height: $post-author-img-size;
+			border-radius: $post-author-border-radius;
+		}
+
+		//color: $post-author-color;
 		font-size: $post-author-font-size;
+		font-weight: $post-author-font-weight;
 	}
 
 	.header {

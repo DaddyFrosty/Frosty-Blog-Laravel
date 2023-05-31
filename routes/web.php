@@ -19,10 +19,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// middleware( "NeedsPermission:PERM1,PERM2" )
+
 Route::get('/', function () {
 //	return view('index');
 	return inertia( 'Index' );
-})->name( "index" );
+})->name( "index" )->middleware( "NeedsPermission:LOL,xD" );
 
 // Login.
 SteamLogin::routes( ["controller" => SteamLoginController::class ] );

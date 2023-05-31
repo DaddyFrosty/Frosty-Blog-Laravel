@@ -7,8 +7,8 @@ use BBCode\Facades\BBCode;
 
 use App\Http\Resources\PostListResource;
 use App\Models\Post;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
-use Inertia\Inertia;
 
 class PostController extends Controller
 {
@@ -17,21 +17,21 @@ class PostController extends Controller
 		$posts = PostListResource::collection( Post::ListAllPostsCached() );
 //		return view( "post.index", [ "posts" => $posts ] );
 
-		$canCreatePost = Post::CanCreate( auth()->user() );
+		$canCreatePost = Post::CanCreate( Auth::user() );
 		return inertia( "Post/Index",
 			[
 				"posts" => $posts,
 				"canCreate" => $canCreatePost,
-				"canClearCache" => Post::CanClearCache( auth()->user() )
+				"canClearCache" => Post::CanClearCache( Auth::user() )
 			] );
 	}
 
 	public function ClearCache()
 	{
-		if ( !Post::CanClearCache( auth()->user() ) )
-			return abort( 403 );
+		if ( !Post::CanClearCache( Auth::user() ) )
+			abort( 403 );
 
-		Post::DestroyCache();
+		Post::FlushCache();
 		return redirect()->route( "posts.index" );
 	}
 
@@ -45,7 +45,7 @@ class PostController extends Controller
 			return null;
 
 		// Check Visibility.
-		if ( !$post->CanView( auth()->user() ) )
+		if ( !$post->CanView( Auth::user() ) )
 			return null;
 
 		$safePost = new PostListResource( $post );
@@ -55,8 +55,8 @@ class PostController extends Controller
 			$safePost["body"] = BBCode::parse( $safePost["body"] );
 
 		// Add edit flag.
-		$safePost["canEdit"] = $post->CanEdit( auth()->user() );
-		$safePost["canDelete"] = $post->CanDelete( auth()->user() );
+		$safePost["canEdit"] = $post->CanEdit( Auth::user() );
+		$safePost["canDelete"] = $post->CanDelete( Auth::user() );
 
 		return $safePost;
 	}
@@ -65,7 +65,7 @@ class PostController extends Controller
 	{
 		$post = $this->FetchPostData( $PostId, true );
 		if ( !$post )
-			return abort( 404 );
+			abort( 404 );
 
 		return inertia( "Post/ViewPost", [ "post" => $post ] );
 	}
@@ -74,7 +74,7 @@ class PostController extends Controller
 	{
 		$post = $this->FetchPostData( $PostId, false );
 		if ( !$post )
-			return abort( 404 );
+			abort( 404 );
 
 		return inertia( "Post/ModifyPost", [ "current_post_state" => $post, "isEdit" => true ] );
 	}
@@ -115,11 +115,11 @@ class PostController extends Controller
 			->first();
 
 		if ( !$post )
-			return abort( 404 );
+			abort( 404 );
 
 		// Check Edit Permissions.
-		if ( !$post->CanEdit( auth()->user() ) )
-			return abort( 403 );
+		if ( !$post->CanEdit( Auth::user() ) )
+			abort( 403 );
 
 		if ( $data[ "title" ] != $post->title )
 		{
@@ -130,15 +130,16 @@ class PostController extends Controller
 		$post->save();
 
 		// Destroy cache.
-		Post::DestroyCache();
+		$post->FlushCached();
+		Post::FlushListCache();
 
 		return redirect()->route( "posts.view_post", [ "PostId" => $post->url_title ] );
 	}
 
 	public function CreatePostPage()
 	{
-		if ( !Post::CanCreate( auth()->user() ) )
-			return abort( 403 );
+		if ( !Post::CanCreate( Auth::user() ) )
+			abort( 403 );
 
 		return inertia( "Post/ModifyPost", [ "isEdit" => false ] );
 	}
@@ -146,8 +147,8 @@ class PostController extends Controller
 	// Submit.
 	public function CreatePost( Request $request )
 	{
-		if ( !Post::CanCreate( auth()->user() ) )
-			return abort( 403 );
+		if ( !Post::CanCreate( Auth::user() ) )
+			abort( 403 );
 
 		$data = $this->ValidatePostData( $request );
 		if ( isset( $data["errors"] ) )
@@ -160,12 +161,12 @@ class PostController extends Controller
 			"title" => $data[ "title" ],
 			"url_title" => Post::GenerateUrlTitle( $data[ "title" ] ),
 			"body" => $data[ "body" ],
-			"author" => "Frosty", // auth()->user()->username,
+			"author_uid" => Auth::user()->uid,
 		]);
 		$post->save();
 
 		// Destroy cache.
-		Post::DestroyCache();
+		Post::FlushListCache();
 
 		return redirect()->route( "posts.view_post", [ "PostId" => $post->url_title ] );
 	}
@@ -177,17 +178,18 @@ class PostController extends Controller
 			->first();
 
 		if ( !$post )
-			return abort( 404 );
+			abort( 404 );
 
 		// Check Edit Permissions.
-		if ( !$post->CanDelete( auth()->user() ) )
-			return abort( 403 );
+		if ( !$post->CanDelete( Auth::user() ) )
+			abort( 403 );
 
 		$post->SetVisibility( "hidden" );
 		$post->save();
 
 		// Destroy cache.
-		Post::DestroyCache();
+		$post->FlushCached();
+		Post::FlushListCache();
 
 		return redirect()
 			->route( "posts.index" )

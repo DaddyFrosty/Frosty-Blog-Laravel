@@ -13,13 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('posts', function (Blueprint $table) {
+        Schema::create('permissions', function (Blueprint $table) {
             $table->id();
-			$table->string( "title" );
-			$table->string( "url_title" );
-			$table->string( "author" );
-			$table->text( "body" );
-			$table->enum( "visible", [ "hidden", "restricted", "visible" ] )->default( "visible" );
+			$table->string( "name", 32 )->unique();
+			$table->string( "color", 16 )->default( '[]' );
+			$table->boolean( "default" )->default( false );
+			$table->integer( "order" )->default( 0 );
+			$table->longText( "permissions" )->default( '{}' );
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('posts');
+        Schema::dropIfExists('permissions');
     }
 };

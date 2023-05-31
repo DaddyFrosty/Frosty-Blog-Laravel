@@ -29,7 +29,10 @@
 							<div class="date">{{ post.created_at }}</div>
 						</div>
 						<div class="second">
-							<div class="author keyword">{{ post.author }}</div>
+							<div class="author keyword">
+								<img :src="post.author.avatar_url" :alt="post.author.name + '\'s Avatar'" />
+								{{ post.author.name }}
+							</div>
 						</div>
 					</div>
 					</Link>
@@ -50,7 +53,10 @@ export default {
 			title: String,
 			url_title: String,
 			created_at: String,
-			author: String,
+			author: {
+				name: String,
+				avatar_url: String,
+			},
 		},
 		canCreate: Boolean,
 		canClearCache: Boolean,

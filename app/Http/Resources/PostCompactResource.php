@@ -20,9 +20,7 @@ class PostCompactResource extends JsonResource
 			"title" => mb_strlen( $this->title ) > Config::$SidebarPostTitleMaxLength
 				? mb_substr( $this->title, 0, Config::$SidebarPostTitleMaxLength ) . "..."
 				: $this->title,
-			"url_title" => $this->url_title,
-			"created_at" => $this->created_at,
-			"author" => $this->author
+			"url_title" => $this->url_title
 		];
     }
 }

@@ -7,19 +7,29 @@
 		<template v-else v-slot:namespace_path>.Posts.{{ Namespaceify( post.url_title ) }}</template>
 		<div class="post-view" v-if="post">
 			<div class="header">
-				<div class="title">{{ post.title }}</div>
-				<div>
-					<span class="date">{{ post.created_at }}</span>
-					-
-					<span class="author keyword">{{ post.author }}</span>
-				</div>
-					<Link v-if="post.canEdit"
-						  :href="route( 'posts.edit_post', { 'PostId': post.url_title } )"
-						  class="button bg-keyword mt-3 mr-1">Edit</Link>
+				<div class="row">
+					<div class="grow">
+						<div class="title">{{ post.title }}</div>
+						<div>
+							<span class="date">{{ post.created_at }}</span>
+<!--							- -->
+<!--							<span class="author keyword">{{ post.author }}</span>-->
+						</div>
 
-					<button class="button bg-danger mt-3" v-if="post.canDelete" data-toggle="modal" data-target="#delete-modal">
-						Delete
-					</button>
+						<Link v-if="post.canEdit"
+							  :href="route( 'posts.edit_post', { 'PostId': post.url_title } )"
+							  class="button bg-keyword mt-3 mr-1">Edit</Link>
+
+						<button class="button bg-danger mt-3" v-if="post.canDelete" data-toggle="modal" data-target="#delete-modal">
+							Delete
+						</button>
+					</div>
+
+					<div class="author keyword">
+						<img :src="post.author.avatar_url" :alt="post.author.name + '\'s Avatar'" />
+						{{ post.author.name }}
+					</div>
+				</div>
 			</div>
 			<div class="body" v-html="post.body"></div>
 		</div>
@@ -47,7 +57,10 @@ export default {
 		post: {
 			title: String,
 			created_at: String,
-			author: String,
+			author: {
+				name: String,
+				avatar_url: String,
+			},
 			namespace: String,
 			canEdit: Boolean,
 			canDelete: Boolean,

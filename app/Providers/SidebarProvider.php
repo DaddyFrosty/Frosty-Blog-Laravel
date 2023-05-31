@@ -6,9 +6,11 @@ use Illuminate\Support\ServiceProvider;
 
 use App\Models\Post;
 use App\Http\Resources\PostCompactResource;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 use App\Config;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 class SidebarProvider extends ServiceProvider
 {
@@ -30,13 +32,17 @@ class SidebarProvider extends ServiceProvider
     public function boot()
     {
 //		dd(PostCompactResource::collection( Post::ListAllPostsCached() )->resolve());
-		view()->composer( "layouts.navigation.sidebar", function( $view ) {
+		$postsCollection = PostCompactResource::collection( Post::ListAllPostsCached() );
+//		$output = new ConsoleOutput();
+//		$output->writeln( Str::uuid() );
+
+		view()->composer( "layouts.navigation.sidebar", function( $view ) use ( &$postsCollection ) {
 			$view
-				->with( "posts", PostCompactResource::collection( Post::ListAllPostsCached() )->resolve() );
+				->with( "posts", $postsCollection->resolve() );
 		});
 
         // Provides the posts to the sidebar.
 		// Inertia.
-		Inertia::share( "posts_sidebar", PostCompactResource::collection( Post::ListAllPostsCached() ) );
+		Inertia::share( "posts_sidebar", $postsCollection );
     }
 }

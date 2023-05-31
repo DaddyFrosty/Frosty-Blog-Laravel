@@ -16,12 +16,16 @@ class PostListResource extends JsonResource
      */
     public function toArray($request)
     {
+		$xd = $this->author->name;
 		return [
 			"title" => $this->title,
 			"url_title" => $this->url_title,
 			"created_at" => $this->created_at->format( Config::$DateFormattingString ),
 //			"updated_at" => $this->updated_at->format( Config::$DateFormattingString ),
-			"author" => $this->author,
+			"author" => [
+				"name" => $this->author->GetName(),
+				"avatar_url" => $this->author->avatar,
+			],
 			"body" => $this->body,
 		];
     }
