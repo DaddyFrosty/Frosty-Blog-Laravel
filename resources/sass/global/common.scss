@@ -289,6 +289,15 @@ $posts-date-font-size: 0.95rem;
 $posts-date-font-color: $color-default;
 $posts-date-margin-top: 0.1rem;
 
+// Edit, Create button.
+@media ( min-width: $content-inner-size-pc ) {
+	.posts-actions {
+		position: absolute;
+		right: 0;
+		top: -2.75rem;
+	}
+}
+
 .posts {
 	.post {
 		background-color: $posts-bg;

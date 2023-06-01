@@ -6,7 +6,7 @@
 		<template v-slot:namespace_path>.Posts</template>
 
 		<div class="relative">
-			<div v-if="canCreate || canClearCache" class="absolute right-0 -top-11">
+			<div v-if="canCreate || canClearCache" class="posts-actions">
 				<Link v-if="canCreate"
 					  :href="route( 'posts.create_post' )"
 					  class="button bg-keyword">Create Post</Link>
