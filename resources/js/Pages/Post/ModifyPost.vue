@@ -29,7 +29,7 @@
 						</button>
 					</div>
 
-					<div class="author keyword">
+					<div class="author keyword" v-if="isEdit">
 						<img :src="post.author.avatar_url" :alt="post.author.name + '\'s Avatar'" />
 						{{ post.author.name }}
 					</div>

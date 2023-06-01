@@ -59,7 +59,8 @@ class Permission extends Model
 		if ( isset( $this->permissions["*"] ) )
 			return true;
 
-		return array_key_exists( $permissionId, $this->permissions );
+//		return array_key_exists( $permissionId, $this->permissions );
+		return isset( $this->permissions[$permissionId] ) && $this->permissions[$permissionId];
 	}
 
 	public static function DefaultRoleId() : int
@@ -72,7 +73,7 @@ class Permission extends Model
 	 */
 	public static function GetGroup( int $permissionId ) : Permission | null
 	{
-		return Permission::find( $permissionId )->first();
+		return Permission::where( "id", $permissionId )->first();
 	}
 
 	/*

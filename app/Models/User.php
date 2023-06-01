@@ -72,6 +72,7 @@ class User extends Authenticatable
 			return $this->getRelationValue( "permission" );
 
 		$permission = Permission::GetCachedGroup( $this->permission_id );
+//		dd($this->permission_id, $permission);
 
 		$this->setRelation( "permission", $permission );
 		return $permission;

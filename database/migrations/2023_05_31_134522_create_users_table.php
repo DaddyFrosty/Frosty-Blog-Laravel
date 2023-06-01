@@ -18,7 +18,7 @@ return new class extends Migration
         Schema::create( "users", function ( Blueprint $table ) {
             $table->id();
 			$table->string( "uid", 36 )->unique();
-			$table->string( "name", 32 );
+			$table->string( "name", 32 )->nullable();
 			$table->string( "steam_name", 32 )->nullable();
 			$table->string( "avatar", 255 );
 			$table->foreignIdFor( Permission::class )->nullable()->constrained( 'permissions' )->nullOnDelete();

@@ -156,10 +156,22 @@ class Post extends Model
 	/*
 	 * Generate a URL title from a title.
 	 */
+	public static array $ReplaceCharactersWithUnderscore = [
+		" ", ",", "\"", "/", "\\", ".", ":", ";",
+		"!", "@", "#", "$", "%", "^", "&", "*",
+		"(", ")", "+", "=", "{", "}", "[", "]",
+		"|", "?", "<", ">", "~", "`", "'", "\"",
+		"“", "”", "’", "‘", "–", "—", "…", "•",
+	];
+
+	public static string $NonANSILettersAndNumberRegex = '/[\x00-\x2F|\x3A-\x40|\x5B-\x5E|\x60|\x7B-\xFF]/u';
+
 	public static function GenerateUrlTitle( string $title ) : string
 	{
 		$url_title = mb_strtolower( $title );
-		$url_title = str_replace( " ", "_", $url_title );
+		$url_title = str_replace( Post::$ReplaceCharactersWithUnderscore, "_", $url_title );
+		$url_title = preg_replace( Post::$NonANSILettersAndNumberRegex, "", $url_title );
+		$url_title = preg_replace( '/_{2,}/', "_", $url_title );
 
 		if ( Post::where( "url_title", $url_title )->get()->isEmpty() )
 			return $url_title;
@@ -191,7 +203,7 @@ class Post extends Model
 	 */
 	public static function GetPost( int $postId ) : Post | null
 	{
-		return Post::find( $postId )->first();
+		return Post::where( "id", $postId )->first();
 	}
 
 	/*
