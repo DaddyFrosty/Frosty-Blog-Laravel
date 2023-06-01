@@ -385,6 +385,11 @@ $post-image-border-radius: 0.25rem;
 		margin-bottom: $post-header-spacing;
 
 		border-radius: $post-border-radius;
+
+		.row {
+			flex-wrap: nowrap;
+		}
+
 		&.error {
 			border-top-left-radius: 0;
 			border-top-right-radius: 0;
