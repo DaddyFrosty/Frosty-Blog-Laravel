@@ -120,6 +120,14 @@ $sidebar-first-indentation: 1rem;
 		margin-top: $sidebar-list-item-margin;
 	}
 
+	ul {
+		padding-left: $sidebar-indentation;
+
+		&.solution-top {
+			padding-left: $sidebar-first-indentation;
+		}
+	}
+
 	.sidebar {
 		display: flex;
 		flex-direction: column;
