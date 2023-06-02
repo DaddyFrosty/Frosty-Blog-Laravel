@@ -228,6 +228,14 @@ a {
 	background-color: $color-warning;
 }
 
+ul {
+	margin: 0;
+
+	&.no-pad {
+		padding-left: 0;
+	}
+}
+
 /* COL, ROW */
 .col {
 	display: flex;
@@ -286,7 +294,7 @@ $posts-date-margin-top: 0.1rem;
 }
 
 .posts {
-	:not( li:first-child ) {
+	li:not( li:first-child ) {
 		margin-top: $sidebar-list-item-margin;
 	}
 
