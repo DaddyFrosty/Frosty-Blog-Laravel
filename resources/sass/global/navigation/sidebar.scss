@@ -115,6 +115,19 @@ $sidebar-first-indentation: 1rem;
 		color: $color-scope;
 	}
 
+	li {
+		display: block;
+		margin-top: $sidebar-list-item-margin;
+	}
+
+	ul {
+		margin: 0;
+
+		&.no-pad {
+			padding-left: 0;
+		}
+	}
+
 	ul {
 		padding-left: $sidebar-indentation;
 

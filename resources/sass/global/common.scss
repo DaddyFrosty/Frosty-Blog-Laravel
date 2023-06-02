@@ -175,19 +175,6 @@ a {
 	color: $color-keyword;
 }
 
-li {
-	display: block;
-	margin-top: $sidebar-list-item-margin;
-}
-
-ul {
-	margin: 0;
-
-	&.no-pad {
-		padding-left: 0;
-	}
-}
-
 /* DEFAULT BG */
 .bg-keyword {
 	background-color: $color-keyword;
@@ -299,6 +286,10 @@ $posts-date-margin-top: 0.1rem;
 }
 
 .posts {
+	:not( li:first-child ) {
+		margin-top: $sidebar-list-item-margin;
+	}
+
 	.post {
 		background-color: $posts-bg;
 		padding: $posts-padding;
@@ -418,6 +409,7 @@ $post-image-border-radius: 0.25rem;
 		img, video {
 			display: block;
 			margin-top: $post-image-margin-top;
+			margin-bottom: $post-image-margin-top;
 			max-width: 100%;
 			border-radius: $post-image-border-radius;
 		}
