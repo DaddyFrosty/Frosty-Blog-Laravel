@@ -31,3 +31,5 @@ auth.json
 /.fleet
 /.idea
 /.vscode
+
+*.DS_STORE

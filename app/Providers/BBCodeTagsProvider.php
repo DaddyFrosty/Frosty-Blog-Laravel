@@ -25,6 +25,12 @@ class BBCodeTagsProvider extends ServiceProvider
      */
     public function boot()
     {
+		// Prevent artisan from running this code.
+		if ( $this->app->runningInConsole() )
+		{
+			return;
+		}
+
         // Adds the tags: keyword, type, string, namespace, name, var, scope, default
 		BBCode::addTag(
 			name:    'keyword',

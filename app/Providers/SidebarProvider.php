@@ -31,7 +31,12 @@ class SidebarProvider extends ServiceProvider
      */
     public function boot()
     {
-//		dd(PostCompactResource::collection( Post::ListAllPostsCached() )->resolve());
+		// Prevent artisan from running this code.
+		if ( $this->app->runningInConsole() )
+		{
+			return;
+		}
+
 		$postsCollection = PostCompactResource::collection( Post::ListAllPostsCached() );
 //		$output = new ConsoleOutput();
 //		$output->writeln( Str::uuid() );
