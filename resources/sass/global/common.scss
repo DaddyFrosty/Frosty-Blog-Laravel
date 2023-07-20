@@ -421,6 +421,8 @@ $post-image-border-radius: 0.25rem;
 			max-width: 100%;
 			border-radius: $post-image-border-radius;
 		}
+
+		white-space: break-spaces;
 	}
 
 	input[type=text], textarea {
